@@ -4,120 +4,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spotify - Your favourite Music Player</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <title>Spotify - Online Music Player</title>
+    <meta name="description"
+        content="A responsive Spotify-style web music player with searchable Haryanvi songs, real album artwork, and playback controls.">
+    <meta name="keywords" content="Spotify clone, music player, Haryanvi songs, Masoom Sharma, web player">
+    <meta name="author" content="Rohit">
+    <meta name="application-name" content="Spotify Music Player">
+    <meta name="theme-color" content="#121212">
+    <meta name="color-scheme" content="dark">
+    <meta property="og:title" content="Spotify - Online Music Player">
+    <meta property="og:description"
+        content="Search, browse, and play a local Haryanvi playlist with responsive Spotify-inspired UI.">
+    <meta property="og:type" content="website">
+    <meta property="og:image"
+        content="https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/9d/47/6b/9d476b34-218d-4b43-2873-6c5167ed59cb/cover.jpg/600x600bb.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Spotify - Online Music Player">
+    <meta name="twitter:description"
+        content="A responsive Spotify-style player with real song metadata and cover art.">
+    <meta name="twitter:image"
+        content="https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/9d/47/6b/9d476b34-218d-4b43-2873-6c5167ed59cb/cover.jpg/600x600bb.jpg">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="utility.css">
+    <script src="app.js" defer></script>
 </head>
 
 <body>
-    <div class="container">
+    <div class="app">
+        <div class="mobile-overlay" id="mobileOverlay" hidden></div>
 
-        <div class="left box bg-black">
-
-            <div class="home  rounded bg-grey m-1 p-1 ">
-
-                <div class="logo"><img class="invert" src="img/logo.svg" alt="logo"></div>
-                <ul>
-                    <li class="li-style"><img class="invert" src="./img/home.svg" alt="home">Home</li>
-                </ul>
-                <ul>
-                    <li class="li-style"><img class="invert" src="img/search.svg" alt="search">Search</li>
-                </ul>
-
-
-            </div>
-
-            <div class="library rounded bg-grey m-1 p-1 ">
-                <div class="library-box flex">
-
-                    <img class=" invert li-style" src="img/playlist.svg" alt="playlist">
-
-
-                    <h4>Your Library</h4>
+        <div class="layout">
+            <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+                <div class="sidebar-card brand-card">
+                    <a class="brand" href="#" aria-label="Spotify home">
+                        <img class="logo" src="img/logo.svg" alt="">
+                    </a>
+                    <button class="icon-button sidebar-close" id="sidebarClose" type="button" aria-label="Close menu">
+                        <img src="img/close.svg" alt="">
+                    </button>
                 </div>
 
+                <nav class="sidebar-card nav-card" aria-label="Primary">
+                    <a class="nav-link active" href="#">
+                        <img src="img/home.svg" alt="">
+                        <span>Home</span>
+                    </a>
+                    <button class="nav-link" id="focusSearch" type="button">
+                        <img src="img/search.svg" alt="">
+                        <span>Search</span>
+                    </button>
+                </nav>
 
-                <div class="footer">
-                    <div><a href="https://www.spotify.com/jp/legal/"><span>Legal</span></a></div>
-                    <div><a href="https://www.spotify.com/jp/privacy/"><span>Privacy Center</span></a></div>
-                    <div><a href="https://www.spotify.com/jp/legal/privacy-policy/"><span>Privacy Policy</span></a>
+                <section class="sidebar-card library-card" aria-labelledby="libraryTitle">
+                    <div class="section-heading">
+                        <img src="img/playlist.svg" alt="">
+                        <h2 id="libraryTitle">Your Library</h2>
                     </div>
 
-                    <div><a href="https://www.spotify.com/jp/legal/cookies-policy/"><span>Cookies</span></a></div>
-                    <div><a href="https://www.spotify.com/jp/legal/privacy-policy/#s3"><span>About Ads</span></a></div>
-                    <div><a href="https://www.spotify.com/jp/accessibility/"><span>Accessibility</span></a></div>
-                </div>
-            </div>
+                    <div class="library-list" id="songList" aria-label="Songs"></div>
 
+                    <footer class="legal-links" aria-label="Legal links">
+                        <a href="https://www.spotify.com/jp/legal/">Legal</a>
+                        <a href="https://www.spotify.com/jp/privacy/">Privacy Center</a>
+                        <a href="https://www.spotify.com/jp/legal/privacy-policy/">Privacy Policy</a>
+                        <a href="https://www.spotify.com/jp/legal/cookies-policy/">Cookies</a>
+                        <a href="https://www.spotify.com/jp/legal/privacy-policy/#s3">About Ads</a>
+                        <a href="https://www.spotify.com/jp/accessibility/">Accessibility</a>
+                    </footer>
+                </section>
+            </aside>
 
+            <main class="main" id="mainContent">
+                <header class="topbar">
+                    <div class="topbar-left">
+                        <button class="icon-button menu-button" id="menuButton" type="button" aria-label="Open menu">
+                            <img src="img/hamburger.svg" alt="">
+                        </button>
+
+                        <div class="history-buttons" aria-label="Navigation history">
+                            <button class="circle-button" type="button" aria-label="Back">
+                                <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M15 6 9 12l6 6" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                            <button class="circle-button" type="button" aria-label="Forward">
+                                <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="m9 18 6-6-6-6" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <form class="search" role="search">
+                        <label class="visually-hidden" for="searchInput">Search songs or artists</label>
+                        <img src="img/search.svg" alt="">
+                        <input id="searchInput" type="search" autocomplete="off" placeholder="Search songs or artists">
+                    </form>
+
+                    <div class="account-actions">
+                        <button class="signup-button" type="button">Sign up</button>
+                        <button class="login-button" type="button">Log in</button>
+                    </div>
+                </header>
+
+                <section class="content">
+                    <div class="page-title">
+                        <p>Made for this session</p>
+                        <h1>Trending Songs</h1>
+                    </div>
+
+                    <div class="cards" id="trackGrid" aria-label="Trending songs"></div>
+                </section>
+            </main>
         </div>
 
-
-        <div class="right box rounded bg-grey m-1 p-1">
-            <div class="header rounded bg-header m-1 p-1 ">
-                <div class="nav">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M15 6L9.70711 11.2929C9.37377 11.6262 9.20711 11.7929 9.20711 12C9.20711 12.2071 9.37377 12.3738 9.70711 12.7071L15 18"
-                            stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M9 18L14.2929 12.7071C14.6262 12.3738 14.7929 12.2071 14.7929 12C14.7929 11.7929 14.6262 11.6262 14.2929 11.2929L9 6"
-                            stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </div>
-                 <div class="buttons">
-                    <button class="signupbtn">Sign up</button>
-                    <button class="loginbtn">Log in</button>
-                </div>
-
-            </div>
-            <div class="cardsContainer">
-                <h1>Trending Songs</h1>
-                <div class="cards">
-                    <div class="card">
-                        <img src="img/music1.jpg" alt="">
-                        <h2>
-                            At Peace
-                        </h2>
-                        <p>Karan Aujla, Ikky</p>
-
-                    </div>
-                    <div class="card">
-                        <img src="img/music1.jpg" alt="">
-                        <h2>
-                            Raat Ke Shikari
-                        </h2>
-                        <p>Masoom Sharma, Sweta Chauhan, Yash Thaukral</p>
-
-
-
-                    </div>
+        <footer class="player" aria-label="Music player">
+            <div class="now-playing">
+                <img class="cover" id="currentCover" src="img/music1.jpg" alt="">
+                <div class="track-copy">
+                    <p id="currentTitle">Choose a song</p>
+                    <span id="currentArtist">Your library is ready</span>
+                    <span id="currentMeta">Album details will appear here</span>
                 </div>
             </div>
-            <div class="play">
 
-             <div class="songsbutton">
-                <img src="img/prevsong.svg" alt="">
-                <img src="img/play.svg" alt="">
-                <img src="img/nextsong.svg" alt="">
-             </div>  </div>
+            <div class="player-controls">
+                <div class="control-buttons">
+                    <button class="icon-button" id="prevButton" type="button" aria-label="Previous song">
+                        <img src="img/prevsong.svg" alt="">
+                    </button>
+                    <button class="play-button" id="playButton" type="button" aria-label="Play">
+                        <img id="playIcon" src="img/play.svg" alt="">
+                    </button>
+                    <button class="icon-button" id="nextButton" type="button" aria-label="Next song">
+                        <img src="img/nextsong.svg" alt="">
+                    </button>
+                </div>
 
+                <div class="timeline">
+                    <span id="currentTime">0:00</span>
+                    <input id="progressBar" type="range" min="0" max="1000" value="0" aria-label="Song progress">
+                    <span id="duration">0:00</span>
+                </div>
+            </div>
 
+            <div class="volume-control">
+                <button class="icon-button" id="muteButton" type="button" aria-label="Mute">
+                    <img id="volumeIcon" src="img/volume.svg" alt="">
+                </button>
+                <input id="volumeSlider" type="range" min="0" max="1" step="0.01" value="0.8" aria-label="Volume">
+            </div>
 
-
-
-
-
-
-
-        </div>
-
+            <audio id="audioPlayer" preload="metadata"></audio>
+        </footer>
     </div>
 </body>
 
